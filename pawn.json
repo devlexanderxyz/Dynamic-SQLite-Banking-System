@@ -1,0 +1,21 @@
+{
+	"user": "devlexanderxyz",
+	"repo": "gm",
+	"entry": "gamemodes/gm.pwn",
+	"output": "gamemodes/gm.amx",
+	"dependencies": [
+		"sampctl/samp-stdlib"
+	],
+	"runtime": {
+		"version": "0.3.7",
+		"mode": "server",
+		"rcon_password": "password",
+		"port": 7777,
+		"hostname": "SA-MP Server",
+		"maxplayers": 50,
+		"language": "",
+		"filterscripts": [
+			"samp-bank"
+		]
+	}
+}

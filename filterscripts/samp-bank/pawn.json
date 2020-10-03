@@ -1,0 +1,12 @@
+
+{
+    "user": "Southclaws",
+    "repo": "samp-bank",
+    "entry": "samp-bank.pwn",
+    "output": "../samp-bank.amx",
+    "dependencies": [
+        "sampctl/samp-stdlib",
+        "pawn-lang/YSI-Includes@5.x",
+        "samp-incognito/samp-streamer-plugin:v2.9.4"
+    ]
+}
