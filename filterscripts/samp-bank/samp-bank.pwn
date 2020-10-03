@@ -699,54 +699,54 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	new query[256], string[128], name[64];
 	if(dialogid == BANK_EDIT_DIALOG)
 	{
-	    if(response)
-	    {
+		if(response)
+		{
 			new bankid = AccountData[playerid][account_editing];
-		    if(listitem == 0)
-		    {
-		        return ShowPlayerDialog(playerid, BANK_NAME_DIALOG, DIALOG_STYLE_INPUT, "{FFFFFF}Bank Settings > Change Name", "{FFFFFF}Please enter a new name for the bank below:", "Enter", "Cancel");
-		    }
-		    else if(listitem == 1)
-		    {
-		        if(BankData[bankid][bank_loans] == true)
+			if(listitem == 0)
+			{
+				return ShowPlayerDialog(playerid, BANK_NAME_DIALOG, DIALOG_STYLE_INPUT, "{FFFFFF}Bank Settings > Change Name", "{FFFFFF}Please enter a new name for the bank below:", "Enter", "Cancel");
+			}
+			else if(listitem == 1)
+			{
+				if(BankData[bankid][bank_loans] == true)
 				{
-				    BankData[bankid][bank_loans] = false;
-				    
-		        	format(query, sizeof(query), "UPDATE `BANKS` SET `LOANS` = '%d' WHERE `ID` = '%d' COLLATE NOCASE", BankData[bankid][bank_loans], bankid);
+					BankData[bankid][bank_loans] = false;
+					
+					format(query, sizeof(query), "UPDATE `BANKS` SET `LOANS` = '%d' WHERE `ID` = '%d' COLLATE NOCASE", BankData[bankid][bank_loans], bankid);
 					db_free_result(db_query(db, query));
 				
 					format(string, sizeof(string), "{FFFFFF}Change Name: %s\nToggle Loans: Disabled", BankData[bankid][bank_name]);
 				}
 				else
 				{
-				    BankData[bankid][bank_loans] = true;
+					BankData[bankid][bank_loans] = true;
 
-		        	format(query, sizeof(query), "UPDATE `BANKS` SET `LOANS` = '%d' WHERE `ID` = '%d' COLLATE NOCASE", BankData[bankid][bank_loans], bankid);
+					format(query, sizeof(query), "UPDATE `BANKS` SET `LOANS` = '%d' WHERE `ID` = '%d' COLLATE NOCASE", BankData[bankid][bank_loans], bankid);
 					db_free_result(db_query(db, query));
 					
 					format(string, sizeof(string), "{FFFFFF}Change Name: %s\nToggle Loans: Enabled", BankData[bankid][bank_name]);
 				}
-			  	ShowPlayerDialog(playerid, BANK_EDIT_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Settings", string, "Edit", "Cancel");
-		    }
-	    }
-	    return 1;
+				ShowPlayerDialog(playerid, BANK_EDIT_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Settings", string, "Edit", "Cancel");
+			}
+		}
+		return 1;
 	}
 	else if(dialogid == BANK_NAME_DIALOG)
 	{
-	    if(response)
-	    {
+		if(response)
+		{
 			new bankid = AccountData[playerid][account_editing];
-	        if(strlen(inputtext) < 3 || strlen(inputtext) > 64) return SendClientMessage(playerid, X11_RED, "ERROR: The bank name must be from 3-64 characters long.");
+			if(strlen(inputtext) < 3 || strlen(inputtext) > 64) return SendClientMessage(playerid, X11_RED, "ERROR: The bank name must be from 3-64 characters long.");
 
 			format(name, sizeof(name), "%s", inputtext);
-	        BankData[bankid][bank_name] = name;
+			BankData[bankid][bank_name] = name;
 
 			UpdateDynamic3DTextLabelText(BankData[bankid][bank_label], X11_WHITE, BankData[bankid][bank_name]);
-	        
-	        format(query, sizeof(query), "UPDATE `BANKS` SET `NAME` = '%q' WHERE `ID` = '%d' COLLATE NOCASE", BankData[bankid][bank_name], bankid);
+			
+			format(query, sizeof(query), "UPDATE `BANKS` SET `NAME` = '%q' WHERE `ID` = '%d' COLLATE NOCASE", BankData[bankid][bank_name], bankid);
 			db_free_result(db_query(db, query));
-	        
-	        if(BankData[bankid][bank_loans] == true)
+			
+			if(BankData[bankid][bank_loans] == true)
 			{
 				format(string, sizeof(string), "{FFFFFF}Change Name: %s\nToggle Loans: Enabled", BankData[bankid][bank_name]);
 			}
@@ -755,27 +755,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				format(string, sizeof(string), "{FFFFFF}Change Name: %s\nToggle Loans: Disabled", BankData[bankid][bank_name]);
 			}
 			ShowPlayerDialog(playerid, BANK_EDIT_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Settings", string, "Edit", "Cancel");
-	    }
-	    return 1;
+		}
+		return 1;
 	}
 	else if(dialogid == BANK_BALANCE_DIALOG)
 	{
-	    if(!response)
-	    {
-	        ShowBankMenu(playerid);
-	    }
+		if(!response)
+		{
+			ShowBankMenu(playerid);
+		}
 		return 1;
 	}
 	else if(dialogid == BANK_WITHDRAW_DIALOG)
 	{
-	    if(response)
-	    {
-	        new balance = AccountData[playerid][account_balance];
-	        if(!IsNumeric(inputtext) || strlen(inputtext) < 1) return SendClientMessage(playerid, X11_RED, "ERROR: You must input a number value greater than 0.");
-	        if(strval(inputtext) > balance) return SendClientMessage(playerid, X11_RED, "ERROR: Insufficient funds.");
-	        
-	        new amount = strval(inputtext);
-	        AccountData[playerid][account_balance] = AccountData[playerid][account_balance] - amount;
+		if(response)
+		{
+			new balance = AccountData[playerid][account_balance];
+			if(!IsNumeric(inputtext) || strlen(inputtext) < 1) return SendClientMessage(playerid, X11_RED, "ERROR: You must input a number value greater than 0.");
+			if(strval(inputtext) > balance) return SendClientMessage(playerid, X11_RED, "ERROR: Insufficient funds.");
+			
+			new amount = strval(inputtext);
+			AccountData[playerid][account_balance] = AccountData[playerid][account_balance] - amount;
 
 			GivePlayerMoney(playerid, amount);
 			
@@ -783,22 +783,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			format(string, sizeof(string), "SERVER: You have successfully withdraw $%d from your bank account.", amount);
 			return SendClientMessage(playerid, X11_WHITE, string);
-	    }
-	    else if(!response)
-	    {
-	        ShowBankMenu(playerid);
-	    }
+		}
+		else if(!response)
+		{
+			ShowBankMenu(playerid);
+		}
 		return 1;
 	}
 	else if(dialogid == BANK_DEPOSIT_DIALOG)
 	{
-	    if(response)
-	    {
-	        if(!IsNumeric(inputtext) || strlen(inputtext) < 1) return SendClientMessage(playerid, X11_RED, "ERROR: You must input a number value greater than 0.");
-	        if(strval(inputtext) > GetPlayerMoney(playerid)) return SendClientMessage(playerid, X11_RED, "ERROR: Insufficient funds.");
+		if(response)
+		{
+			if(!IsNumeric(inputtext) || strlen(inputtext) < 1) return SendClientMessage(playerid, X11_RED, "ERROR: You must input a number value greater than 0.");
+			if(strval(inputtext) > GetPlayerMoney(playerid)) return SendClientMessage(playerid, X11_RED, "ERROR: Insufficient funds.");
 
-	        new amount = strval(inputtext);
-	        AccountData[playerid][account_balance] = AccountData[playerid][account_balance] + amount;
+			new amount = strval(inputtext);
+			AccountData[playerid][account_balance] = AccountData[playerid][account_balance] + amount;
 
 			GivePlayerMoney(playerid, - amount);
 
@@ -806,55 +806,55 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			format(string, sizeof(string), "SERVER: You have successfully deposited $%d into your bank account.", amount);
 			return SendClientMessage(playerid, X11_WHITE, string);
-	    }
-	    else if(!response)
-	    {
-	        ShowBankMenu(playerid);
-	    }
+		}
+		else if(!response)
+		{
+			ShowBankMenu(playerid);
+		}
 		return 1;
 	}
 	else if(dialogid == BANK_DEBT_DIALOG)
 	{
-	    if(response)
-	    {
+		if(response)
+		{
 			return ShowPlayerDialog(playerid, BANK_PAY_DIALOG, DIALOG_STYLE_INPUT, "{FFFFFF}Bank Menu > Debt", "{FFFFFF}Please enter the amount you want to pay back below:", "Enter", "Back");
 		}
-	    else if(!response)
-	    {
-	        ShowBankMenu(playerid);
-	    }
+		else if(!response)
+		{
+			ShowBankMenu(playerid);
+		}
 		return 1;
 	}
 	else if(dialogid == BANK_PAY_DIALOG)
 	{
-	    if(response)
-	    {
-	        new amount = strval(inputtext), debt = AccountData[playerid][account_debt];
-	        if(!IsNumeric(inputtext) || strlen(inputtext) < 1) return SendClientMessage(playerid, X11_RED, "ERROR: You must input a number value greater than 0.");
-	        if(strval(inputtext) > GetPlayerMoney(playerid)) return SendClientMessage(playerid, X11_RED, "ERROR: Insufficient funds.");
-	        if(amount > debt) return SendClientMessage(playerid, X11_RED, "ERROR: You do not owe that much money to the bank.");
-	        
-	        AccountData[playerid][account_debt] = AccountData[playerid][account_debt] - amount;
-	        
+		if(response)
+		{
+			new amount = strval(inputtext), debt = AccountData[playerid][account_debt];
+			if(!IsNumeric(inputtext) || strlen(inputtext) < 1) return SendClientMessage(playerid, X11_RED, "ERROR: You must input a number value greater than 0.");
+			if(strval(inputtext) > GetPlayerMoney(playerid)) return SendClientMessage(playerid, X11_RED, "ERROR: Insufficient funds.");
+			if(amount > debt) return SendClientMessage(playerid, X11_RED, "ERROR: You do not owe that much money to the bank.");
+			
+			AccountData[playerid][account_debt] = AccountData[playerid][account_debt] - amount;
+			
 			GivePlayerMoney(playerid, - amount);
 
 			SavePlayerAccount(playerid);
 
 			format(string, sizeof(string), "SERVER: You have successfully payed off $%d of your debt.", amount);
 			return SendClientMessage(playerid, X11_WHITE, string);
-	    }
-	    else if(!response)
-	    {
-	        ShowBankMenu(playerid);
-	    }
-	    return 1;
+		}
+		else if(!response)
+		{
+			ShowBankMenu(playerid);
+		}
+		return 1;
 	}
 	else if(dialogid == BANK_LOANS_DIALOG)
 	{
-	    if(response)
-	    {
-		    if(listitem == 0)
-		    {
+		if(response)
+		{
+			if(listitem == 0)
+			{
 				new amount = 500000, interest = amount / 8, funds = GetPlayerMoney(playerid), rating = (amount / 2);
 				if(AccountData[playerid][account_debt] > 0) return SendClientMessage(playerid, X11_RED, "ERROR: You cannot apply for anymore loans until your debt is payed off.");
 				if(funds < rating)
@@ -870,9 +870,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SavePlayerAccount(playerid);
 
 				return SendClientMessage(playerid, X11_WHITE, "SERVER: You have successfully applied for the loan and was approved for $500000.");
-		    }
-		    else if(listitem == 1)
-		    {
+			}
+			else if(listitem == 1)
+			{
 				new amount = 1000000, interest = amount / 8, funds = GetPlayerMoney(playerid), rating = (amount / 2);
 				if(AccountData[playerid][account_debt] > 0) return SendClientMessage(playerid, X11_RED, "ERROR: You cannot apply for anymore loans until your debt is payed off.");
 				if(funds < rating)
@@ -888,9 +888,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SavePlayerAccount(playerid);
 
 				return SendClientMessage(playerid, X11_WHITE, "SERVER: You have successfully applied for the loan and was approved for $1000000.");
-		    }
-		    else if(listitem == 2)
-		    {
+			}
+			else if(listitem == 2)
+			{
 				new amount = 5000000, interest = amount / 8, funds = GetPlayerMoney(playerid), rating = (amount / 2);
 				if(AccountData[playerid][account_debt] > 0) return SendClientMessage(playerid, X11_RED, "ERROR: You cannot apply for anymore loans until your debt is payed off.");
 				if(funds < rating)
@@ -906,9 +906,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SavePlayerAccount(playerid);
 
 				return SendClientMessage(playerid, X11_WHITE, "SERVER: You have successfully applied for the loan and was approved for $5000000.");
-		    }
-		    else if(listitem == 3)
-		    {
+			}
+			else if(listitem == 3)
+			{
 				new amount = 10000000, interest = amount / 8, funds = GetPlayerMoney(playerid), rating = (amount / 2);
 				if(AccountData[playerid][account_debt] > 0) return SendClientMessage(playerid, X11_RED, "ERROR: You cannot apply for anymore loans until your debt is payed off.");
 				if(funds < rating)
@@ -924,42 +924,42 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SavePlayerAccount(playerid);
 
 				SendClientMessage(playerid, X11_WHITE, "SERVER: You have successfully applied for the loan and was approved for $10000000.");
-		    }
-		    return 1;
-	    }
-	    else if(!response)
-	    {
-	        ShowBankMenu(playerid);
-	    }
-	    return 1;
+			}
+			return 1;
+		}
+		else if(!response)
+		{
+			ShowBankMenu(playerid);
+		}
+		return 1;
 	}
 	else if(dialogid == BANK_MENU_DIALOG)
 	{
-	    if(response)
-	    {
-		    if(listitem == 0)
-		    {
-		        format(string, sizeof(string), "{FFFFFF}Balance: $%d", AccountData[playerid][account_balance]);
-		        return ShowPlayerDialog(playerid, BANK_BALANCE_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Menu > Balance", string, "Close", "Back");
-		    }
-		    else if(listitem == 1)
-		    {
-		        return ShowPlayerDialog(playerid, BANK_WITHDRAW_DIALOG, DIALOG_STYLE_INPUT, "{FFFFFF}Bank Menu > Withdraw", "{FFFFFF}Please enter the amount you want to withdraw below:", "Enter", "Back");
-		    }
-		    else if(listitem == 2)
-		    {
-		        return ShowPlayerDialog(playerid, BANK_DEPOSIT_DIALOG, DIALOG_STYLE_INPUT, "{FFFFFF}Bank Menu > Deposit", "{FFFFFF}Please enter the amount you want to deposit below:", "Enter", "Back");
-		    }
-		    else if(listitem == 3)
-		    {
-		        format(string, sizeof(string), "{FFFFFF}Debt: $%d", AccountData[playerid][account_debt]);
-		        return ShowPlayerDialog(playerid, BANK_DEBT_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Menu > Debt", string, "Pay", "Back");
-		    }
-		    else if(listitem == 4)
-		    {
-		        return ShowPlayerDialog(playerid, BANK_LOANS_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Menu > Loans", "{FFFFFF}Budget Loan ($500K)\nEconomy Loan ($1M)\nBusiness Loan ($5M)\nInvestment Loan ($10M)", "Apply", "Back");
-		    }
-	    }
+		if(response)
+		{
+			if(listitem == 0)
+			{
+				format(string, sizeof(string), "{FFFFFF}Balance: $%d", AccountData[playerid][account_balance]);
+				return ShowPlayerDialog(playerid, BANK_BALANCE_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Menu > Balance", string, "Close", "Back");
+			}
+			else if(listitem == 1)
+			{
+				return ShowPlayerDialog(playerid, BANK_WITHDRAW_DIALOG, DIALOG_STYLE_INPUT, "{FFFFFF}Bank Menu > Withdraw", "{FFFFFF}Please enter the amount you want to withdraw below:", "Enter", "Back");
+			}
+			else if(listitem == 2)
+			{
+				return ShowPlayerDialog(playerid, BANK_DEPOSIT_DIALOG, DIALOG_STYLE_INPUT, "{FFFFFF}Bank Menu > Deposit", "{FFFFFF}Please enter the amount you want to deposit below:", "Enter", "Back");
+			}
+			else if(listitem == 3)
+			{
+				format(string, sizeof(string), "{FFFFFF}Debt: $%d", AccountData[playerid][account_debt]);
+				return ShowPlayerDialog(playerid, BANK_DEBT_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Menu > Debt", string, "Pay", "Back");
+			}
+			else if(listitem == 4)
+			{
+				return ShowPlayerDialog(playerid, BANK_LOANS_DIALOG, DIALOG_STYLE_LIST, "{FFFFFF}Bank Menu > Loans", "{FFFFFF}Budget Loan ($500K)\nEconomy Loan ($1M)\nBusiness Loan ($5M)\nInvestment Loan ($10M)", "Apply", "Back");
+			}
+		}
 	}
 	return 1;
 }
@@ -1105,4 +1105,3 @@ YCMD:editbank(playerid, params[], help)
 
 	return 1;
 }
-
